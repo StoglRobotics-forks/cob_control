@@ -16,7 +16,6 @@
   <exec_depend>cob_collision_velocity_filter</exec_depend>
   <exec_depend>cob_control_msgs</exec_depend>
   <exec_depend>cob_footprint_observer</exec_depend>
-  <exec_depend>cob_frame_tracker</exec_depend>
   <exec_depend>cob_hardware_emulation</exec_depend>
 
   <export>
