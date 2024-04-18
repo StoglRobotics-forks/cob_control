@@ -2,8 +2,8 @@
 Changelog for package cob_control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.8.24 (2024-04-18)
+-------------------
 * Merge pull request `#283 <https://github.com/4am-robotics/cob_control/issues/283>`_ from fmessmer/noetic-devel
   cob4 eol cleanup
 * remove cob_control_msgs
