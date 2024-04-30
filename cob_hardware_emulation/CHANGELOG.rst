@@ -5,8 +5,8 @@ Changelog for package cob_hardware_emulation
 0.8.24 (2024-04-18)
 -------------------
 
-Forthcoming
------------
+0.9.24 (2024-04-30)
+-------------------
 * 0.8.24
 * update changelogs
 * Contributors: fmessmer
