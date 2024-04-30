@@ -5,6 +5,12 @@ Changelog for package cob_hardware_emulation
 0.8.24 (2024-04-18)
 -------------------
 
+Forthcoming
+-----------
+* 0.8.24
+* update changelogs
+* Contributors: fmessmer
+
 0.8.23 (2024-02-20)
 -------------------
 * Merge pull request `#279 <https://github.com/4am-robotics/cob_control/issues/279>`_ from fmessmer/fix/emulation

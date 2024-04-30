@@ -20,6 +20,26 @@ Changelog for package cob_control
 * remove cob_mecanum_controller
 * Contributors: Felix Messmer, fmessmer
 
+Forthcoming
+-----------
+* 0.8.24
+* update changelogs
+* Merge pull request `#283 <https://github.com/4am-robotics/cob_control/issues/283>`_ from fmessmer/noetic-devel
+  cob4 eol cleanup
+* remove cob_control_msgs
+* remove cob_frame_tracker
+* remove cob_twist_controller
+* remove cob_obstacle_distance
+* remove cob_cartesian_controller
+* remove cob_control_mode_adapter
+* remove cob_base_controller_utils
+* remove cob_omni_drive_controller
+* remove cob_tricycle_controller
+* remove cob_trajectory_controller
+* remove cob_model_identifier
+* remove cob_mecanum_controller
+* Contributors: Felix Messmer, fmessmer
+
 0.8.23 (2024-02-20)
 -------------------
 
