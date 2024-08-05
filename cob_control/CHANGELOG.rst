@@ -2,8 +2,13 @@
 Changelog for package cob_control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.8.24 (2024-04-18)
+Forthcoming
+-----------
+
+0.9.24 (2024-04-30)
 -------------------
+* 0.8.24
+* update changelogs
 * Merge pull request `#283 <https://github.com/4am-robotics/cob_control/issues/283>`_ from fmessmer/noetic-devel
   cob4 eol cleanup
 * remove cob_control_msgs
@@ -20,10 +25,8 @@ Changelog for package cob_control
 * remove cob_mecanum_controller
 * Contributors: Felix Messmer, fmessmer
 
-0.9.24 (2024-04-30)
+0.8.24 (2024-04-18)
 -------------------
-* 0.8.24
-* update changelogs
 * Merge pull request `#283 <https://github.com/4am-robotics/cob_control/issues/283>`_ from fmessmer/noetic-devel
   cob4 eol cleanup
 * remove cob_control_msgs
