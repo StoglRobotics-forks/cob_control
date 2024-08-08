@@ -15,102 +15,133 @@
  */
 
 
-#ifndef COB_FOOTPRINT_OBSERVER_H
-#define COB_FOOTPRINT_OBSERVER_H
+#ifndef COB_COLLISION_VELOCITY_FILTER_H
+#define COB_COLLISION_VELOCITY_FILTER_H
+
 
 //##################
 //#### includes ####
 
-// ROS includes 
+// standard includes
+//--
 
+// ROS includes
 #include <rclcpp/rclcpp.hpp>
 
-// message includes
-#include <geometry_msgs/msg/point.hpp>
+// ROS message includes
+#include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/polygon_stamped.hpp>
-#include <geometry_msgs/msg/vector3.hpp>
-
-#include <tf2/exceptions.h>
-#include <tf2_ros/buffer.h>
-#include <tf2_ros/transform_listener.h>
+#include <geometry_msgs/msg/polygon.hpp>
+#include <nav_msgs/msg/occupancy_grid.hpp>
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
-/*
-#include <footprint_observer/srv/get_footprint.hpp>
-
-
 ///
-/// @class FootprintObserver
-/// @brief checks the footprint of care-o-bot and advertises a service to get the adjusted footprint
+/// @class CollisionVelocityFilter
+/// @brief checks for obstacles in driving direction and stops the robot
 ///
 ///
-class FootprintObserver : public rclcpp::Node
+class CollisionVelocityFilter : public rclcpp::Node
 {
-  public:
-    ///
-    /// @brief  constructor
-    ///
-    FootprintObserver();
-    ///
-    /// @brief  destructor
-    ///
-    ~FootprintObserver();
+public:
 
-    ///
-    /// @brief  checks the footprint of the robot if it needs to be enlarged due to arm or tray
-    ///
-    void checkFootprint();
+  ///
+  /// @brief  Constructor
+  ///
+  CollisionVelocityFilter();
 
-    ///
-    /// @brief  callback for GetFootprint service
-    /// @param  req - request message to service
-    /// @param  resp - response message from service
-    /// @return service call successfull
-    ///
-    bool getFootprintCB(footprint_observer::srv::GetFootprint::Request &req, footprint_observer::srv::GetFootprint::Response &resp);
+  ///
+  /// @brief  reads twist command from teleop device (joystick, teleop_keyboard, ...) and calls functions
+  ///         for collision check (obstacleHandler) and driving of the robot (performControllerStep)
+  /// @param  twist - velocity command sent as twist message (twist.linear.x/y/z, twist.angular.x/y/z)
+  ///
+  void joystickVelocityCB(const std::shared_ptr<const geometry_msgs::msg::Twist> &twist);
 
-    // public members
-    rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr topic_pub_footprint_;
-    rclcpp::Service<footprint_observer::srv::GetFootprint>::SharedPtr srv_get_footprint_;
+  ///
+  /// @brief  reads obstacles from costmap
+  /// @param  obstacles - 2D occupancy grid in rolling window mode!
+  ///
+  void readObstacles();
 
-    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
-    std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
-  private:
-    ///
-    /// @brief  loads the robot footprint from the costmap node
-    /// @param  node - costmap node to check for footprint parameter
-    /// @return points of a polygon specifying the footprint
-    ///
-    std::vector<geometry_msgs::msg::Point> loadRobotFootprint(ros::NodeHandle node);
 
-    ///
-    /// @brief  publishes the adjusted footprint as geometry_msgs::StampedPolygon message
-    ///
-    void publishFootprint();
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr topic_pub_command_;
+  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr topic_pub_relevant_obstacles_;
 
-    ///
-    /// @brief  computes the sign of x
-    /// @param  x - number
-    /// @return sign of x
-    ///
-    double sign(double x);
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr joystick_velocity_sub_;
+  rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr local_costmap_sub_;
+  rclcpp::Subscription<geometry_msgs::msg::PolygonStamped>::SharedPtr footprint_sub_;
 
-    // private members
-    std::vector<geometry_msgs::msg::Point> robot_footprint_;
-    double epsilon_;
-    double footprint_front_initial_, footprint_rear_initial_, footprint_left_initial_, footprint_right_initial_;
-    double footprint_front_, footprint_rear_, footprint_left_, footprint_right_;
-    std::string frames_to_check_;
-    std::string robot_base_frame_;
+private:
 
-    pthread_mutex_t m_mutex;
+  ///
+  /// @brief  checks distance to obstacles in driving direction and slows down/stops
+  ///         robot and publishes command velocity to robot
+  ///
+  void performControllerStep();
 
-    rclcpp::Time last_tf_missing_;
-    unsigned int times_warned_;
+  ///
+  /// @brief  checks for obstacles in driving direction of the robot (rotation included)
+  ///         and publishes relevant obstacles
+  ///
+  void obstacleHandler();
+
+  ///
+  /// @brief  returns the sign of x
+  ///
+  double sign(double x);
+
+  ///
+  /// @brief  computes distance between two points
+  /// @param  a,b - Points
+  /// @return distance
+  ///
+  double getDistance2d(geometry_msgs::msg::Point a, geometry_msgs::msg::Point b);
+
+  ///
+  /// @brief  checks if obstacle lies already within footprint -> this is ignored due to sensor readings of the hull etc
+  /// @param  x_obstacle - x coordinate of obstacle in occupancy grid local costmap
+  /// @param  y_obstacle - y coordinate of obstacle in occupancy grid local costmap
+  /// @return true if obstacle outside of footprint
+  ///
+  bool obstacleValid(double x_obstacle, double y_obstacle);
+
+  ///
+  /// @brief  stops movement of the robot
+  ///
+  void stopMovement();
+
+  //obstacle_treshold
+  int costmap_obstacle_treshold_;
+
+  //frames
+  std::string global_frame_, robot_frame_;
+
+  //velocity
+  geometry_msgs::msg::Vector3 robot_twist_linear_, robot_twist_angular_;
+  double v_max_, vtheta_max_;
+  double ax_max_, ay_max_, atheta_max_;
+
+  //obstacle avoidance
+  std::shared_ptr<nav_msgs::msg::OccupancyGrid> local_costmap_;
+  nav_msgs::msg::OccupancyGrid relevant_obstacles_;
+  bool costmap_received_;
+  std::shared_ptr<geometry_msgs::msg::PolygonStamped> robot_footprint_;
+  double footprint_left_, footprint_right_, footprint_front_, footprint_rear_;
+  double influence_radius_, stop_threshold_, obstacle_damping_dist_, use_circumscribed_threshold_;
+  double closest_obstacle_dist_, closest_obstacle_angle_;
+
+  // variables for slow down behavior
+  rclcpp::Time last_time_;
+  double kp_, kv_;
+  double vx_last_, vy_last_, vtheta_last_;
+  double virt_mass_;
+
+  // BUT velocity limited marker
+  //cob_collision_velocity_filter::VelocityLimitedMarker velocity_limited_marker_;
+
 };
-*/
+//CollisionVelocityFilter
 
 #endif

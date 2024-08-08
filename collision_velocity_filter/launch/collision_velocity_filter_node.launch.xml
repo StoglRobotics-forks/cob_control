@@ -1,0 +1,11 @@
+<launch>
+  <!--Arm Controller-->
+  <node pkg="collision_velocity_filter" exec="collision_velocity_filter_node" output="screen">
+     <param name="use_sim_time" value="true" />
+     <remap from="~/command_in" to="/cmd_vel" />
+     <!--
+     <param from="$(find-pkg-share $(var runtime_config_package))/config/twist_mux.yaml" />
+     -->
+  </node>
+
+</launch>

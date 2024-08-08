@@ -3,7 +3,7 @@ project(collision_velocity_filter)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra 
-  -Werror=conversion -Werror=unused-but-set-variable -Werror=return-type -Werror=shadow 
+  -Werror=conversion -Werror=unused-but-set-variable -Wno-unused-parameter -Werror=return-type -Werror=shadow 
   -Wno-float-conversion -Wno-sign-compare)
 endif()
 
@@ -12,8 +12,10 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   rclcpp
   tf2
   tf2_ros
+  nav_msgs
   std_msgs
   geometry_msgs
+  visualization_msgs
 )
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
@@ -43,6 +45,11 @@ install(
 install(
   DIRECTORY include/
   DESTINATION include/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_export_include_directories(

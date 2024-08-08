@@ -5,7 +5,8 @@
   <version>1.0.0</version>
   <description>The cob_collision_velocity_filter package is a package for collision avoidance using teleoperation.</description>
   <!-- original authors -->
-  <author email="frm@ipa.fraunhofer.de">Florian Mirus</author>
+  <author>Matthias Gruhler</author>
+  <author>Michal Spanel</author>
   <!-- ros2 port author -->
   <maintainer email="nibanovic@gmail.com">Nikola Banović</maintainer>
   <author email="nibanovic@gmail.com">Nikola Banović</author>
@@ -19,6 +20,8 @@
   <depend>std_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
+  <depend>nav_msgs</depend>
+  <depend>visualization_msgs</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

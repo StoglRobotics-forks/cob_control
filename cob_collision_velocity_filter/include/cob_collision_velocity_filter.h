@@ -69,7 +69,7 @@ public:
 
   ///
   /// @brief  Destructor
-  ///
+  /// 
   ~CollisionVelocityFilter();
 
   ///

@@ -176,7 +176,7 @@ void CollisionVelocityFilter::getFootprint(const ros::TimerEvent& event)
 {
   ROS_DEBUG("[cob_collision_velocity_filter] Update footprint");
   // adjust footprint
-  std::vector<geometry_msgs::Point> footprint;
+  std::vector<geometry_msgs::msg::Point> footprint;
   footprint = anti_collision_costmap_->getRobotFootprint();
 
   pthread_mutex_lock(&m_mutex);
@@ -362,8 +362,8 @@ void CollisionVelocityFilter::obstacleHandler()
   double cur_distance_to_center, cur_distance_to_border;
   double obstacle_theta_robot, obstacle_delta_theta_robot, obstacle_dist_vel_dir;
   bool cur_obstacle_relevant;
-  geometry_msgs::Point cur_obstacle_robot;
-  geometry_msgs::Point zero_position;
+  geometry_msgs::msg::Point cur_obstacle_robot;
+  geometry_msgs::msg::Point zero_position;
   zero_position.x = 0.0f;
   zero_position.y = 0.0f;
   zero_position.z = 0.0f;
@@ -466,7 +466,7 @@ void CollisionVelocityFilter::obstacleHandler()
     {
 
       // calculate cell in 2D space where robot is is point (0, 0)
-      geometry_msgs::Point cell;
+      geometry_msgs::msg::Point cell;
       cell.x = (i % (int)(anti_collision_costmap_->getCostmap()->getSizeInCellsX()))
           * anti_collision_costmap_->getCostmap()->getResolution()
           + anti_collision_costmap_->getCostmap()->getOriginX();
@@ -571,7 +571,7 @@ void CollisionVelocityFilter::obstacleHandler()
                          "[cob_collision_velocity_filter] closest_obstacle_dist_ = " << closest_obstacle_dist_);
 }
 
-double CollisionVelocityFilter::getDistance2d(geometry_msgs::Point a, geometry_msgs::Point b)
+double CollisionVelocityFilter::getDistance2d(geometry_msgs::msg::Point a, geometry_msgs::msg::Point b)
 {
   return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
