@@ -24,28 +24,29 @@
 // ROS includes 
 
 #include <rclcpp/rclcpp.hpp>
-//#include <XmlRpc.h>
 
 // message includes
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/polygon_stamped.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 
+#include <tf2/exceptions.h>
+#include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <footprint_observer/srv/get_footprint.h>
-/* 
+#include <footprint_observer/srv/get_footprint.hpp>
+
 
 ///
 /// @class FootprintObserver
 /// @brief checks the footprint of care-o-bot and advertises a service to get the adjusted footprint
 ///
 ///
-class FootprintObserver
+class FootprintObserver : public rclcpp::Node
 {
   public:
     ///
@@ -68,20 +69,21 @@ class FootprintObserver
     /// @param  resp - response message from service
     /// @return service call successfull
     ///
-    bool getFootprintCB(cob_footprint_observer::GetFootprint::Request &req, cob_footprint_observer::GetFootprint::Response &resp);
+    bool getFootprintCB(footprint_observer::srv::GetFootprint::Request &req, footprint_observer::srv::GetFootprint::Response &resp);
 
     // public members
-    ros::NodeHandle nh_;
-    ros::Publisher topic_pub_footprint_;
-    ros::ServiceServer srv_get_footprint_;
+    rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr topic_pub_footprint_;
+    rclcpp::Service<footprint_observer::srv::GetFootprint>::SharedPtr srv_get_footprint_;
 
+    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
   private:
     ///
     /// @brief  loads the robot footprint from the costmap node
     /// @param  node - costmap node to check for footprint parameter
     /// @return points of a polygon specifying the footprint
     ///
-    std::vector<geometry_msgs::Point> loadRobotFootprint(ros::NodeHandle node);
+    std::vector<geometry_msgs::msg::Point> loadRobotFootprint(ros::NodeHandle node);
 
     ///
     /// @brief  publishes the adjusted footprint as geometry_msgs::StampedPolygon message
@@ -96,18 +98,17 @@ class FootprintObserver
     double sign(double x);
 
     // private members
-    std::vector<geometry_msgs::Point> robot_footprint_;
+    std::vector<geometry_msgs::msg::Point> robot_footprint_;
     double epsilon_;
     double footprint_front_initial_, footprint_rear_initial_, footprint_left_initial_, footprint_right_initial_;
     double footprint_front_, footprint_rear_, footprint_left_, footprint_right_;
-    tf::TransformListener tf_listener_;
     std::string frames_to_check_;
     std::string robot_base_frame_;
 
     pthread_mutex_t m_mutex;
 
-    ros::Time last_tf_missing_;
+    rclcpp::Time last_tf_missing_;
     unsigned int times_warned_;
 };
-*/
+
 #endif

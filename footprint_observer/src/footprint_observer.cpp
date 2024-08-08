@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-/*
-#include <cob_footprint_observer.h>
 
+#include "footprint_observer/footprint_observer.hpp"
+
+/*
 // Constructor
 FootprintObserver::FootprintObserver() :
   times_warned_(0)

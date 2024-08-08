@@ -35,17 +35,18 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 # Add executable
 add_executable(footprint_observer_node src/footprint_observer.cpp)
-target_link_libraries(footprint_observer_node ${Boost_LIBRARIES})
-target_include_directories(
-  footprint_observer_node
-  PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-ament_target_dependencies(
-  footprint_observer_node PUBLIC
-  ${THIS_PACKAGE_INCLUDE_DEPENDS}
-)
+
+rosidl_get_typesupport_target(cpp_typesupport_target
+  ${PROJECT_NAME} rosidl_typesupport_cpp)
+target_link_libraries(footprint_observer_node ${Boost_LIBRARIES} "${cpp_typesupport_target}")
+target_include_directories(footprint_observer_node PRIVATE
+  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+ament_target_dependencies(footprint_observer_node ${THIS_PACKAGE_INCLUDE_DEPENDS})
+
+
+
+
 
 install(
   TARGETS
@@ -64,10 +65,11 @@ ament_export_include_directories(
 
 ament_export_dependencies(
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
+  rosidl_default_runtime
 )
 
 ament_export_libraries(
-  scan_unifier_node
+  footprint_observer_node
 )
 
 ament_package()
