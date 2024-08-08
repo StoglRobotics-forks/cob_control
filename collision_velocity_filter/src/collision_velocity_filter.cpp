@@ -15,7 +15,7 @@
  */
 
 
-#include "footprint_observer/footprint_observer.hpp"
+#include "collision_velocity_filter/collision_velocity_filter.hpp"
 
 /*
 // Constructor

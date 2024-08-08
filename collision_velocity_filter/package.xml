@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>footprint_observer</name>
+  <name>collision_velocity_filter</name>
   <version>1.0.0</version>
-  <description>The footprint_observer package adjusts the footprint of the robot based on the setup (e.g. arm and/or tray).</description>
+  <description>The cob_collision_velocity_filter package is a package for collision avoidance using teleoperation.</description>
   <!-- original authors -->
   <author email="frm@ipa.fraunhofer.de">Florian Mirus</author>
   <!-- ros2 port author -->
@@ -13,9 +13,6 @@
   <license>Apache 2.0</license>
   
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>rosidl_default_generators</buildtool_depend>
-
-  <exec_depend>rosidl_default_runtime</exec_depend>
   
   <depend>rclcpp</depend>
   <depend>geometry_msgs</depend>
@@ -23,7 +20,6 @@
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 
-  <member_of_group>rosidl_interface_packages</member_of_group>
   <export>
     <build_type>ament_cmake</build_type>
   </export>

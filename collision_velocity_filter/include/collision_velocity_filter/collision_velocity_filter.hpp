@@ -38,6 +38,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
+/*
 #include <footprint_observer/srv/get_footprint.hpp>
 
 
@@ -110,5 +111,6 @@ class FootprintObserver : public rclcpp::Node
     rclcpp::Time last_tf_missing_;
     unsigned int times_warned_;
 };
+*/
 
 #endif

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(footprint_observer)
+project(collision_velocity_filter)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra 
@@ -14,7 +14,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   tf2_ros
   std_msgs
   geometry_msgs
-  rosidl_default_generators
 )
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
@@ -26,31 +25,18 @@ endforeach()
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/GetFootprint.srv"
-  DEPENDENCIES
-  std_msgs
-  geometry_msgs
- )
-
 # Add executable
-add_executable(footprint_observer_node src/footprint_observer.cpp)
-
-rosidl_get_typesupport_target(cpp_typesupport_target
-  ${PROJECT_NAME} rosidl_typesupport_cpp)
-target_link_libraries(footprint_observer_node ${Boost_LIBRARIES} "${cpp_typesupport_target}")
-target_include_directories(footprint_observer_node PRIVATE
+add_executable(collision_velocity_filter_node src/collision_velocity_filter.cpp)
+target_link_libraries(collision_velocity_filter_node ${Boost_LIBRARIES})
+target_include_directories(collision_velocity_filter_node PRIVATE
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
-ament_target_dependencies(footprint_observer_node ${THIS_PACKAGE_INCLUDE_DEPENDS})
-
-
-
+ament_target_dependencies(collision_velocity_filter_node ${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 
 install(
   TARGETS
-  footprint_observer_node
+  collision_velocity_filter_node
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -65,11 +51,10 @@ ament_export_include_directories(
 
 ament_export_dependencies(
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
-  rosidl_default_runtime
 )
 
 ament_export_libraries(
-  footprint_observer_node
+  collision_velocity_filter_node
 )
 
 ament_package()
